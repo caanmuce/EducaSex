@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EducaSex - Educación Sexual Integral para la Institución Federico Ozanam</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Variables de diseño */
+        :root {
+            --primary-color: #722F8F;
+            --secondary-color: #FFD166;
+            --accent-color: #112240;
+            --light-color: #ffffff;
+            --dark-color: #212529;
+        }
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: var(--secondary-color);
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn:hover {
+            background-color: var(--secondary-color);
+            color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-title h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        /* Barra de navegación */
+        .navbar {
+            background-color: rgba(241, 86, 221, 0.95);
+            box-shadow: 0 2px 10px rgba(215, 52, 230, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled {
+            background-color: white;
+        }
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin-left: 30px;
+        }
+        .nav-links a {
+            color: var(--dark-color);
+            font-weight: 500;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        /* Header con video de fondo */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        /* Estadísticas y ubicación */
+        .stats-location {
+            background-color: var(--light-color);
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .stat-text {
+            font-size: 1.1rem;
+            color: var(--dark-color);
+        }
+        /* Gráficos de impacto */
+        .charts-section {
+            background-color: white;
+        }
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .chart-card {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .chart-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        /* Sección de Evaluación de Impacto */
+        .impact-evaluation {
+            background-color: var(--light-color);
+        }
+        .evaluation-methods {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+        .methods-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .method-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        .method-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+        .method-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        /* Evaluación de Impacto Formulario */
+        .impact-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 50px;
+        }
+        .form-row {
+            display: flex;
+            margin: 0 -15px;
+        }
+        .form-group {
+            flex: 1;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(114, 47, 143, 0.2);
+            outline: none;
+        }
+        /* Impacto social y ambiental */
+        .impact-section {
+            background-color: white;
+        }
+        .impact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .impact-image {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .impact-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Testimonios */
+        .testimonials {
+            background-color: var(--light-color);
+        }
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .testimonial-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .testimonial-content::before,
+        .testimonial-content::after {
+            content: '"';
+            font-size: 2rem;
+            color: var(--accent-color);
+            position: absolute;
+            opacity: 0.3;
+        }
+        .testimonial-content::before {
+            top: -20px;
+            left: -10px;
+        }
+        .testimonial-content::after {
+            bottom: -40px;
+            right: -10px;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        .author-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        .author-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .author-info h5 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .author-info p {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+        /* Equipo de trabajo */
+        .team-section {
+            background-color: white;
+        }
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .team-member {
+            text-align: center;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .member-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .team-member:hover .member-image img {
+            transform: scale(1.1);
+        }
+        .member-info {
+            padding: 20px;
+            background-color: white;
+        }
+        .member-info h4 {
+            margin-bottom: 10px;
+        }
+        .member-info p {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        /* Suscripción al boletín */
+        .newsletter {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 60px 0;
+        }
+        .newsletter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .newsletter-content h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .newsletter-form {
+            display: flex;
+            margin-top: 30px;
+        }
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+        .newsletter-form button {
+            padding: 0 30px;
+            background-color: var(--secondary-color);
+            color: var(--accent-color);
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .newsletter-form button:hover {
+            background-color: white;
+        }
+        /* Footer */
+        .footer {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 60px 0 0;
+        }
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+        .footer-widget h4 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer-widget h4::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background-color: var(--secondary-color);
+            bottom: 0;
+            left: 0;
+        }
+        .footer-links {
+            list-style: none;
+        }
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        .footer-bottom {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer-bottom p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        /* Chat en vivo */
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .chat-widget:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .chat-widget i {
+            font-size: 1.5rem;
+        }
+        /* Responsive */
+        @media (max-width: 992px) {
+            .charts-container,
+            .newsletter-container {
+                grid-template-columns: 1fr;
+            }
+            .impact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 15px 0;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+            .nav-links.active {
+                transform: translateY(0);
+            }
+            .nav-links li {
+                margin: 15px 0;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="#" class="logo">
+                <img class="rounded-circle" src="img/EducaSex_circular.png" alt="Educasex" width="100px" style="height: auto;">
+
+                EDUCASEX
+            </a>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#about">Sobre el proyecto</a></li>
+                <li><a href="#objectives">Objetivos</a></li>
+                <li><a href="#impact">Impacto</a></li>
+                <li><a href="#testimonials">Testimonios</a></li>
+
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header con video de fondo -->
+    <header class="hero" id="home">
+        <video class="video-bg" autoplay muted loop>
+            <source src="img/5198159-uhd_3840_2160_25fps.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1>EducaSex - Educación Sexual Integral</h1>
+            <p>Transformando vidas a través de la educación sexual en la Institución Federico Ozanam</p>
+            <a href="#about" class="btn">Descubre más</a>
+        </div>
+    </header>
+
+    <!-- Sección de Justificación -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre el Proyecto</h2>
+            </div>
+            <div style="display: flex; gap: 30px; align-items: center;">
+                <div style="flex: 1;">
+                    <h3>¿Por qué es necesario EducaSex?</h3>
+                    <p>La falta de educación sexual en la Institución Educativa Federico Ozanam afecta a muchos jóvenes y adolescentes, generando vacíos e inquietudes sobre un tema crucial para su desarrollo. La educación sexual es un derecho que permite tomar decisiones informadas sobre salud y relaciones respetuosas, previniendo embarazos no deseados y enfermedades de transmisión sexual.</p>
+                    <p>Es esencial implementar un proyecto de educación sexual integral, adaptado a la comunidad educativa y ejecutado sistemáticamente ya que se necesita una buena formación en los jóvenes desde temprana edad para evitar problemas de cualquier ámbito sexual en sus vidas cotidianas en el futuro.</p>
+                    <p>Nos identificamos con (Castillo, 2015): <strong>"NO A LA CULTURA DEL SECRETO, SÍ A LA LIBERTAD DE INFORMACIÓN"</strong></p>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                   <img src="img/Z.png" alt="Educación Sexual" style="width: 400px; border-radius: 10px; box-shadow: 0 50px 80px rgba(0, 0, 0, 0.1);">
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Gráficos de Impacto -->
+    <section class="section charts-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Estadísticas Relevantes</h2>
+            </div>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <h3>Castigos por no cumplir con roles de género</h3>
+                    </div>
+                    <canvas id="genderChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <h3>Embarazos adolescentes en Medellín</h3>
+                    </div>
+                    <canvas id="pregnancyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Evaluación de Impacto -->
+    <section class="section impact-evaluation" id="impact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Evaluación de Impacto</h2>
+            </div>
+            <div class="evaluation-methods">
+                <h3>¿Cómo mediremos el impacto de EducaSex?</h3>
+                <p>Nuestra evaluación integral incluirá tanto métodos cuantitativos como cualitativos para asegurar una comprensión completa del impacto de nuestro proyecto.</p>
+                <div class="methods-container">
+                    <div class="method-card">
+                        <div class="method-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>Encuestas Periódicas</h4>
+                        <p>Aplicaremos encuestas antes y después de la implementación para medir cambios en el conocimiento, actitudes y comportamientos relacionados con la salud sexual.</p>
+                    </div>
+                    <div class="method-card">
+                        <div class="method-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h4>Grupos Focales</h4>
+                        <p>Realizaremos sesiones de discusión con estudiantes para obtener retroalimentación detallada sobre la efectividad del programa y áreas de mejora.</p>
+                    </div>
+                    <div class="method-card">
+                        <div class="method-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h4>Informe de Datos Escolares</h4>
+                        <p>Analizaremos datos institucionales como tasas de abandono escolar y mejoras en el rendimiento académico que puedan correlacionarse con la implementación del programa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="impact-form">
+                <h3>¿Cómo podemos mejorar? ¡Comparte tus comentarios!</h3>
+                <form id="feedbackForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Correo electrónico" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="¿Cómo crees que podemos mejorar nuestro programa de educación sexual?" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Enviar Retroalimentación</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Impacto Social y Ambiental -->
+    <section class="section impact-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestro Impacto Social y Ambiental</h2>
+            </div>
+            <div class="impact-container">
+                <div>
+                    <h3>Beneficios Sociales</h3>
+                    <ul style="list-style: none; margin-bottom: 30px;">
+                        <li><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Reducción de embarazos no deseados</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Prevención de enfermedades de transmisión sexual</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Promoción de relaciones respetuosas y saludables</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Reducción del estigma asociado a la sexualidad</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Fortalecimiento de la confianza entre estudiantes y docentes</li>
+                    </ul>
+                    <h3>Beneficios Ambientales</h3>
+                    <ul style="list-style: none;">
+                        <li><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Reducción del uso de materiales impresos mediante recursos digitales</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Menor necesidad de atención médica por problemas relacionados con la sexualidad</li>
+                    </ul>
+                </div>
+                <div class="impact-image">
+                    <img src="img/DY_DMBaW0AAW6eC (1).jpg" alt="Impacto Social">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Testimonios -->
+    <section class="section testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Testimonios</h2>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>Gracias al programa EducaSex, he aprendido a valorar mi cuerpo y tomar decisiones informadas sobre mi sexualidad. Ahora me siento más segura y empoderada.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Valentina">
+                        </div>
+                        <div class="author-info">
+                            <h5>Valentina M.</h5>
+                            <p>Estudiante de 10º grado</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>Como docente, este programa ha transformado mi enfoque hacia la educación sexual. Ahora puedo abordar estos temas con mayor confianza y los estudiantes responden mucho mejor.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos">
+                        </div>
+                        <div class="author-info">
+                            <h5>Javier López</h5>
+                            <p>Docente de educación física</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>El programa EducaSex ha sido una bendición para nuestra familia. Mi hijo adolescente ahora tiene una comprensión saludable de la sexualidad que antes no tenía.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="María">
+                        </div>
+                        <div class="author-info">
+                            <h5>María G.</h5>
+                            <p>Padre de familia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Sección de Recursos Educativos -->
+    <section class="section" id="resources">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Recursos Educativos</h2>
+            </div>
+            <div class="resources-container">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Guías Interactivas</h3>
+                    <p>Material educativo interactivo diseñado para que los estudiantes aprendan sobre sexualidad de manera entretenida y efectiva.</p>
+                    <a href="#" class="btn-link">Explorar recursos</a>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Consulta Anónima</h3>
+                    <p>Plataforma segura donde los estudiantes pueden hacer preguntas sin identificarse y recibir respuestas de profesionales especializados.</p>
+                    <a href="#" class="btn-link">Realizar consulta</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Material Didáctico</h3>
+                    <p>Guías, infografías y videos explicativos diseñados específicamente para adolescentes, con un lenguaje accesible y moderno.</p>
+                    <a href="#" class="btn-link">Ver materiales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Beneficios -->
+    <section class="section" id="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Beneficios</h2>
+            </div>
+            <div class="benefits-container">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Educación Integral</h3>
+                    <p>Nuestro programa aborda todos los aspectos de la sexualidad, incluyendo la prevención de embarazos no deseados y enfermedades sexuales.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Confidencialidad</h3>
+                    <p>Garantizamos que la información compartida permanecerá segura y que los estudiantes pueden preguntar sin temor al juicio.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Inclusión</h3>
+                    <p>Nuestros recursos son accesibles para todos los estudiantes, independientemente de su género, orientación sexual o contexto socioeconómico.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Calidad</h3>
+                    <p>Información científicamente respaldada y actualizada, impartida por profesionales especializados en educación sexual.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    
+    <!-- Sección de Suscripción al boletín -->
+    <section class="newsletter">
+        <div class="container newsletter-container">
+            <div class="newsletter-content">
+                <h3>¡Suscríbete a nuestro boletín!</h3>
+                <p>Recibe actualizaciones mensuales con los últimos recursos, noticias y eventos relacionados con educación sexual integral.</p>
+            </div>
+            <div class="newsletter-form-container">
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Tu correo electrónico" required>
+                    <button type="submit">Suscribirse</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de contacto -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contáctanos</h2>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>¿Tienes alguna pregunta?</h3>
+                    <p>Estamos aquí para ayudarte. Puedes contactarnos a través de los siguientes medios:</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Dirección</h4>
+                                <p>Cra. 36 #45-8, El Salvador, Medellín, Buenos Aires, Medellín, Antioquia</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Teléfono</h4>
+                                <p>+57 4 444 56 78</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p>camiloandres.munozcelis@iiefedericoozanam.edu.co</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form-container">
+                    <h3>Envíanos un mensaje</h3>
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Correo electrónico" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Asunto" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" placeholder="Mensaje" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Enviar Mensaje</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-widget">
+                <h4>Acerca de EducaSex</h4>
+                <p>Proyecto de educación sexual integral para la Institución Educativa Federico Ozanam, buscando empoderar a los jóvenes con conocimientos y herramientas para tomar decisiones informadas sobre su sexualidad.</p>
+            </div>
+            <div class="footer-widget">
+                <h4>Enlaces Rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#about">Sobre el proyecto</a></li>
+                    <li><a href="#objectives">Objetivos</a></li>
+                    <li><a href="#impact">Impacto</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-widget">
+                <h4>Nuestros Recursos</h4>
+                <ul class="footer-links">
+                    <li><a href="#resources">Guías interactivas</a></li>
+                    <li><a href="#resources">Consulta anónima</a></li>
+                    <li><a href="#resources">Talleres virtuales</a></li>
+                    <li><a href="#resources">Material didáctico</a></li>
+                </ul>
+            </div>
+            <div class="footer-widget">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 EducaSex. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat en vivo -->
+    <div class="chat-widget">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <script>
+        // Barra de navegación scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Menú móvil
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+
+        // Cerrar menú móvil al hacer clic en un enlace
+        const navLinkItems = document.querySelectorAll('.nav-links a');
+        navLinkItems.forEach(item => {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Enlaces de navegación suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Formulario de retroalimentación
+        const feedbackForm = document.getElementById('feedbackForm');
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('¡Gracias por tu retroalimentación! Tus comentarios son valiosos para mejorar nuestro proyecto.');
+                feedbackForm.reset();
+            });
+        }
+
+        // Formulario de contacto
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.');
+                contactForm.reset();
+            });
+        }
+
+        // Formulario de suscripción
+        const newsletterForm = document.querySelector('.newsletter-form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('¡Gracias por suscribirte a nuestro boletín!');
+                newsletterForm.reset();
+            });
+        }
+
+        // Inicializar gráficos
+        window.onload = function() {
+            // Gráfico de castigos por género
+            const genderCtx = document.getElementById('genderChart').getContext('2d');
+            const genderChart = new Chart(genderCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Afirma que son vigilados y sancionados', 'No afirma'],
+                    datasets: [{
+                        data: [90, 10],
+                        backgroundColor: ['#722F8F', '#FFD166'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de embarazos adolescentes
+            const pregnancyCtx = document.getElementById('pregnancyChart').getContext('2d');
+            const pregnancyChart = new Chart(pregnancyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2019', '2020', '2021', '2022', '2023'],
+                    datasets: [{
+                        label: 'Porcentaje de embarazos adolescentes',
+                        data: [15, 14.13, 12.82, 11.30, 10.30],
+                        backgroundColor: 'rgba(114, 47, 143, 0.2)',
+                        borderColor: '#722F8F',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 20
+                        }
+                    }
+                }
+            });
+        };
+
+        // Chat en vivo
+        const chatWidget = document.querySelector('.chat-widget');
+        chatWidget.addEventListener('click', function() {
+            alert('¡Hola! ¿En qué podemos ayudarte hoy?');
+        });
+    </script>
+</body>
+</html>
